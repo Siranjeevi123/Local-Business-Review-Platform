@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Review - LocalReviews</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h1>LocalReviews</h1>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="business-listing.html">Businesses</a></li>
+                    <li><a href="login.html" id="login-btn">Login</a></li>
+                    <li><a href="register.html" id="register-btn">Register</a></li>
+                </ul>
+                <div class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h2>Write a Review</h2>
+            <p id="business-name">Loading business information...</p>
+        </div>
+    </section>
+
+    <section class="review-form-section">
+        <div class="container">
+            <form id="review-form" class="review-form">
+                <div class="form-group">
+                    <label for="reviewer-name">Your Name:</label>
+                    <input type="text" id="reviewer-name" name="reviewer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="reviewer-email">Your Email:</label>
+                    <input type="email" id="reviewer-email" name="reviewer-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Rating:</label>
+                    <div class="rating-input">
+                        <div class="stars-input">
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5"></label>
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4"></label>
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3"></label>
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2"></label>
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="review-title">Review Title:</label>
+                    <input type="text" id="review-title" name="review-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="review-content">Your Review:</label>
+                    <textarea id="review-content" name="review-content" rows="6" required></textarea>
+                </div>
+                <div class="form-notice">
+                    <p>Your review will be visible after admin verification.</p>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn submit-btn">Submit Review</button>
+                    <a href="#" id="cancel-review" class="btn cancel-btn">Cancel</a>
+                </div>
+            </form>
+            <div id="submission-message" class="submission-message hidden"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <div class="logo">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h2>LocalReviews</h2>
+                    </div>
+                    <p>Connecting people with great local businesses since 2025.</p>
+                    <div class="social-links">
+                        <a href="#" class="hover-lift"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="hover-lift"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover-lift"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover-lift"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="business-listing.html">Businesses</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Register</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Review Street, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope"></i> info@localreviews.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LocalReviews. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/validation.js"></script>
+    <script>
+        // Get business ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const businessId = urlParams.get('id');
+        
+        if (!businessId) {
+            window.location.href = 'business-listing.html';
+        }
+        
+        // Load business name
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load business name
+            fetch(`api/businesses.php?id=${businessId}`)
+                .then(response => response.json())
+                .then(business => {
+                    document.getElementById('business-name').textContent = business.name;
+                    document.title = `Review ${business.name} - LocalReviews`;
+                })
+                .catch(error => {
+                    console.error('Error loading business:', error);
+                    document.getElementById('business-name').textContent = 'Unknown Business';
+                });
+            
+            // Setup review form
+            const reviewForm = document.getElementById('review-form');
+            const submissionMessage = document.getElementById('submission-message');
+            
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const reviewerName = document.getElementById('reviewer-name').value;
+                const reviewerEmail = document.getElementById('reviewer-email').value;
+                const rating = document.querySelector('input[name="rating"]:checked').value;
+                const reviewTitle = document.getElementById('review-title').value;
+                const reviewContent = document.getElementById('review-content').value;
+                
+                // Create data object
+                const reviewData = {
+                    business_id: businessId,
+                    reviewer_name: reviewerName,
+                    reviewer_email: reviewerEmail,
+                    rating: rating,
+                    'review-title': reviewTitle,
+                    'review-content': reviewContent
+                };
+                
+                // Show loading state
+                const submitBtn = reviewForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+                
+                // Send data to server
+                fetch('php/api/reviews.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(reviewData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Reset button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
+                    // Show message
+                    submissionMessage.classList.remove('hidden');
+                    
+                    if (data.success) {
+                        // Show success message
+                        submissionMessage.innerHTML = `
+                            <div class="submission-success">
+                                <i class="fas fa-check-circle"></i>
+                                <h3>Thank you for your review!</h3>
+                                <p>Your review has been submitted and is pending approval by our administrators.</p>
+                                <p>Once approved, it will appear on the business page.</p>
+                                <a href="business-detail.html?id=${businessId}" class="btn btn-primary">Back to Business</a>
+                            </div>
+                        `;
+                        
+                        // Hide form
+                        reviewForm.style.display = 'none';
+                    } else {
+                        // Show error message
+                        submissionMessage.innerHTML = `
+                            <div class="submission-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <h3>Error Submitting Review</h3>
+                                <p>${data.message || 'There was an error submitting your review. Please try again.'}</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting review:', error);
+                    
+                    // Reset button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
+                    // Show error message
+                    submissionMessage.classList.remove('hidden');
+                    submissionMessage.innerHTML = `
+                        <div class="submission-error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <h3>Error Submitting Review</h3>
+                            <p>There was a problem connecting to the server. Please try again later.</p>
+                        </div>
+                    `;
+                });
+            });
+            
+            // Handle cancel button
+            document.getElementById('cancel-review').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = `business-detail.html?id=${businessId}`;
+            });
+        });
+    </script>
+</body>
+</html>
